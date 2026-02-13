@@ -110,10 +110,35 @@ class ConnectorButton(QtGuiWidgets.QPushButton):
 
         self.color = rgb2hex(interface2rgb(getTileColor(connector)))
         self.highlight = rgb2hex(interface2rgb(BUTTON_HIGHLIGHT_COLOR))
-        self.highlighted_style = f"QPushButton{{background-color:{self.color};{BUTTON}{BUTTON_BORDER_HIGHLIGHT}}} QPushButton:hover{{background-color:{self.highlight};{BUTTON}{BUTTON_BORDER_HIGHLIGHT}}}"
-        self.default_style = f"QPushButton{{background-color:{self.color};{BUTTON}{BUTTON_BORDER_DEFAULT}}} QPushButton:hover{{background-color:{self.highlight};{BUTTON}{BUTTON_BORDER_DEFAULT}}}"
-        self.selected_style = f"QPushButton{{background-color:{self.color};{BUTTON}{BUTTON_BORDER_SELECTED}}} QPushButton:hover{{background-color:{self.highlight};{BUTTON}{BUTTON_BORDER_SELECTED}}}"
+        self.highlighted_style = (
+            "QPushButton{{background-color:{color};{button}{border}}} "
+            "QPushButton:hover{{background-color:{highlight};{button}{border}}}"
+        ).format(
+            color=self.color,
+            highlight=self.highlight,
+            button=BUTTON,
+            border=BUTTON_BORDER_HIGHLIGHT
+        )
 
+        self.default_style = (
+            "QPushButton{{background-color:{color};{button}{border}}} "
+            "QPushButton:hover{{background-color:{highlight};{button}{border}}}"
+        ).format(
+            color=self.color,
+            highlight=self.highlight,
+            button=BUTTON,
+            border=BUTTON_BORDER_DEFAULT
+        )
+
+        self.selected_style = (
+            "QPushButton{{background-color:{color};{button}{border}}} "
+            "QPushButton:hover{{background-color:{highlight};{button}{border}}}"
+        ).format(
+            color=self.color,
+            highlight=self.highlight,
+            button=BUTTON,
+            border=BUTTON_BORDER_SELECTED
+        )
         self.setTextDefault()
         self.setStyleDefault()
 
@@ -202,8 +227,15 @@ class StandardButton(QtGuiWidgets.QPushButton):
 
         self.color = rgb2hex(interface2rgb(color))
         self.highlight = rgb2hex(interface2rgb(BUTTON_HIGHLIGHT_COLOR))
-        self.setStyleSheet(f"QPushButton{{background-color:{self.color};{BUTTON}}} QPushButton:hover{{background-color:{self.highlight};{BUTTON}}}")
-
+        self.setStyleSheet(
+            "QPushButton{{background-color:{color};{button}}} "
+            "QPushButton:hover{{background-color:{highlight};{button}}}"
+            .format(
+                color=self.color,
+                highlight=self.highlight,
+                button=BUTTON
+            )
+        )
 
 class ConnectorListModel(QtCore.QStringListModel):
     """Class to extend the QAbstractListModel to store the Connector full name in the model."""
@@ -1307,7 +1339,7 @@ def setConnectorSettings(connector, txt):
 
     if BOLD_LABELS:
         current_font = connector.knob("note_font").value()
-        connector.knob("note_font").setValue(f"{current_font} Bold")
+        connector.knob("note_font").setValue("{} Bold".format(current_font))
 
 
 def addConnectorNodeButtons(node):
